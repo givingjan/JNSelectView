@@ -1,5 +1,4 @@
-# JNSelectView
-=======
+
 ## JNSelectView
 
 ![Platform](http://img.shields.io/badge/platform-iOS-red.svg?style=flat
