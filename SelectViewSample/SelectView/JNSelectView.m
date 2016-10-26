@@ -117,7 +117,7 @@
                                   title:(NSString*)strTitle
                       completionHandler:(void(^)(NSInteger index))completionHandler {
     UIViewController *topVc = [JNSelectView topMostController];
-    NSArray *arySelected = selectedIndex == -1? nil : @[[NSNumber numberWithInt:selectedIndex]];
+    NSArray *arySelected = selectedIndex == -1? nil : @[[NSNumber numberWithInt:(int)selectedIndex]];
     NSArray *aryDataList = [JNSelectView getDataList:ary selectedList:arySelected];
     JNSelectView *view = [JNSelectView getSelectViewWithList:aryDataList title:strTitle multiple:NO heigh:kSelectViewHeight];
     if (selectedIndex != -1) {

@@ -50,7 +50,7 @@
                 NSString *strResult = [NSString stringWithFormat:@"Favorite Player : %@",aryDataList[index]];
                 self.m_iSelectedIndex = index;
                 [self updateString:strResult];
-                NSLog(@"Select Index: %d",index);
+                NSLog(@"Select Index: %ld",(long)index);
 
             }];
             break;
