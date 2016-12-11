@@ -56,7 +56,6 @@
     view.m_iMaxPick = kDefaultMaxPick;
     view.m_iMinimumPick = kDefaultMinimumPick;
     view.multipleCompletionHandler = completionHandler;
-    [view updateButtonState];
     [topVc.view addSubview:view];
     
     [JNSelectView showView:topVc.view selectView:view];
@@ -75,7 +74,7 @@
     view.m_iMaxPick = maxPick;
     view.m_iMinimumPick = minimumPick;
     view.multipleCompletionHandler = completionHandler;
-    [view updateButtonState];
+    
     [topVc.view addSubview:view];
     
     [JNSelectView showView:topVc.view selectView:view];
@@ -91,12 +90,12 @@
     UIViewController *topVc = [JNSelectView topMostController];
     NSArray *aryDataList = [JNSelectView getDataList:ary selectedList:nil];
     JNSelectView *view = [JNSelectView getSelectViewWithList:aryDataList title:strTitle multiple:YES heigh:kSelectViewHeight];
+    
     view.m_iMaxPick = maxPick;
     view.m_iMinimumPick = minimumPick;
-    [view updateButtonState];
     view.multipleCompletionHandler = completionHandler;
-    [topVc.view addSubview:view];
     
+    [topVc.view addSubview:view];
     [JNSelectView showView:topVc.view selectView:view];
 }
 
@@ -105,7 +104,9 @@
     UIViewController *topVc = [JNSelectView topMostController];
     NSArray *aryDataList = [JNSelectView getDataList:ary selectedList:nil];
     JNSelectView *view = [JNSelectView getSelectViewWithList:aryDataList title:strTitle multiple:NO heigh:kSelectViewHeight];
+    
     view.singleCompletionHandler = completionHandler;
+    
     [topVc.view addSubview:view];
     [JNSelectView showView:topVc.view selectView:view];
 }
@@ -120,10 +121,13 @@
     NSArray *arySelected = selectedIndex == -1? nil : @[[NSNumber numberWithInt:(int)selectedIndex]];
     NSArray *aryDataList = [JNSelectView getDataList:ary selectedList:arySelected];
     JNSelectView *view = [JNSelectView getSelectViewWithList:aryDataList title:strTitle multiple:NO heigh:kSelectViewHeight];
+    
     if (selectedIndex != -1) {
         view.m_iCurrentSelected = selectedIndex;
     }
+    
     view.singleCompletionHandler = completionHandler;
+    
     [topVc.view addSubview:view];
     [JNSelectView showView:topVc.view selectView:view];
 }
@@ -134,6 +138,7 @@
     NSMutableArray *aryResult = [[NSMutableArray alloc]init];
 
     NSMutableDictionary *dic;
+    
     for (int i = 0 ; i < aryList.count ; i++) {
         dic = [@{@"Title":aryList[i],@"Selected":[NSNumber numberWithBool:NO]}mutableCopy];
         [aryResult addObject:dic];
@@ -141,6 +146,7 @@
     
     if (arySelected != nil) {
         NSInteger index;
+        
         for (NSNumber *number in arySelected) {
             index = [number integerValue];
             [aryResult[index] setObject:[NSNumber numberWithBool:YES] forKey:@"Selected"];
@@ -217,9 +223,9 @@
 
 - (void)addHeaderView {
     UIView *vHeader = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.m_vSelectView.frame.size.width, kHeaderHeight)];
-    vHeader.backgroundColor = kHeaderBackgroundColor;
-    
     UILabel *lbTitle = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, vHeader.frame.size.width, kHeaderHeight)];
+    
+    vHeader.backgroundColor = kHeaderBackgroundColor;
     lbTitle.textColor = kHeaderTitleColor;
     lbTitle.textAlignment = NSTextAlignmentCenter;
     lbTitle.font = [UIFont systemFontOfSize:13.0f];
@@ -232,7 +238,9 @@
 
 - (void)addTableView {
     self.m_tvContent = [[UITableView alloc]initWithFrame:CGRectMake(0, kHeaderHeight, self.m_vSelectView.frame.size.width, self.m_vSelectView.frame.size.height - kButtonHeight - kHeaderHeight)];
+    
     [self registerCell:self.m_bIsMultiple];
+    
     self.m_tvContent.showsVerticalScrollIndicator = NO;
     self.m_tvContent.delegate = self;
     self.m_tvContent.dataSource = self;
@@ -291,17 +299,6 @@
     
 }
 
-- (void)updateButtonState {
-
-    if ([self getPickCount] >= self.m_iMinimumPick) {
-        self.m_btConfirm.userInteractionEnabled = YES;
-        [self.m_btConfirm setTitleColor:kButtonTitleColor forState:UIControlStateNormal];
-    } else {
-        self.m_btConfirm.userInteractionEnabled = NO;
-        [self.m_btConfirm setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    }
-}
-
 - (NSArray *)getSelectedIndexes {
     NSMutableArray *aryIndexes = [[NSMutableArray alloc]init];
     
@@ -330,8 +327,13 @@
             else
             {
                 if (self.singleCompletionHandler) {
-                    NSInteger index = [[self getSelectedIndexes][0] integerValue];
-                    self.singleCompletionHandler(index);
+                    if ([self getSelectedIndexes].count == 0) {
+                        [self dismissThisView];
+                        break;
+                    } else {
+                        NSInteger index = [[self getSelectedIndexes][0] integerValue];
+                        self.singleCompletionHandler(index);
+                    }
                 }
             }
             
@@ -364,11 +366,10 @@
 
 - (UIView *)getSelectViewWithHeight:(CGFloat)height {
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
-
     CGFloat x = kMarginHorizontal;
     CGFloat y = (screenSize.height - height)/2;
-    
     UIView *selectView = [[UIView alloc]initWithFrame:CGRectMake(x,y , screenSize.width-x*2, height)];
+    
     selectView.backgroundColor = [UIColor whiteColor];
     selectView.layer.cornerRadius = 5.0f;
     selectView.clipsToBounds = YES;
@@ -380,6 +381,7 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     // multiple pick
     SelectViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    
     cell.m_lbText.text = [self.m_aryDataList[indexPath.row] objectForKey:@"Title"];
     cell.m_ivCheck.hidden = ![[self.m_aryDataList[indexPath.row] objectForKey:@"Selected"]boolValue];
     
@@ -394,9 +396,9 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // multiple pick
     NSArray *aryPaths;
+    
     if (self.m_bIsMultiple == YES) {
         [self pickCell:indexPath];
-        [self updateButtonState];
         
         aryPaths = @[indexPath];
     }
@@ -405,6 +407,7 @@
         // change selected state to 'NO' for last selected.
         
         NSIndexPath *beforeSelectedIndex = [NSIndexPath indexPathForRow:(int)self.m_iCurrentSelected inSection:0];
+        
         [self.m_aryDataList[(int)self.m_iCurrentSelected] setObject:[NSNumber numberWithBool:NO] forKey:@"Selected"];
         [self.m_aryDataList[indexPath.row] setObject:[NSNumber numberWithBool:YES] forKey:@"Selected"];
         // point new obj
@@ -414,7 +417,6 @@
     }
     
     [tableView reloadRowsAtIndexPaths:aryPaths withRowAnimation:UITableViewRowAnimationFade];
-    
 }
 
 @end
