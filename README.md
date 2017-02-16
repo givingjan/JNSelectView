@@ -19,7 +19,7 @@ JNSelectView is simple SelectView component for iOS (Obj-C)<br/>
 ## Usage
 Just drag the folder 'SelectView' into your project.
 ###### single select
-```
+```objective-c
 [JNSelectView presentSingleSelectViewWithList:aryDataList
                                         title:@"title"
                             completionHandler:^(NSInteger index)
@@ -29,7 +29,7 @@ Just drag the folder 'SelectView' into your project.
 
 ```
 ###### multiple select
-```
+```objective-c
 [JNSelectView presentMultipleSelectViewWithList:aryDataList
                                           title:@"title"
                               completionHandler:^(NSArray *aryList) {
@@ -38,7 +38,7 @@ Just drag the folder 'SelectView' into your project.
 
 ```
 ###### multiple select (max pick & minimum pick & Remain previous)
-```
+```objective-c
 // self.m_arSelected first should be nil,
 // point to aryList when completionHandler be called.
 
