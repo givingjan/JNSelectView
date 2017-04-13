@@ -8,17 +8,17 @@
 [![License](http://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat
 )](http://mit-license.org)
 
-JNSelectView is simple SelectView component for iOS (Obj-C)<br/>
+### JNSelectView is simple SelectView component for iOS (Obj-C)
 
-######multiple select
-<img src="multipleSelect.gif" width="300">
-######single select
+#### Multiple Select
+<img src="multipleSelect.gif" width="300"></br>
+#### Single Select
 <img src="singleSelect.gif" width="300">
 
 
 ## Usage
 Just drag the folder 'SelectView' into your project.
-###### single select
+###### Single Select
 ```objective-c
 [JNSelectView presentSingleSelectViewWithList:aryDataList
                                         title:@"title"
@@ -28,7 +28,7 @@ Just drag the folder 'SelectView' into your project.
 }];
 
 ```
-###### multiple select
+###### Multiple Select
 ```objective-c
 [JNSelectView presentMultipleSelectViewWithList:aryDataList
                                           title:@"title"
@@ -37,7 +37,7 @@ Just drag the folder 'SelectView' into your project.
 }];
 
 ```
-###### multiple select (max pick & minimum pick & Remain previous)
+###### Multiple Select (max pick & minimum pick & Remain previous)
 ```objective-c
 // self.m_arSelected first should be nil,
 // point to aryList when completionHandler be called.
@@ -56,10 +56,10 @@ Just drag the folder 'SelectView' into your project.
 ```
 
 ## Feature
-* Easy to use, using method with completionHandler!
+* Easy to use, just write your code in block.
 * Available for all size (iPhone / iPad)
 * Multiple select / Single select
-* Configurate max pick and minimum pick(option)
+* Able to Set Max/Minimum count of select.
 * Remain Previous selected indexes.(option)
 
 ## License
